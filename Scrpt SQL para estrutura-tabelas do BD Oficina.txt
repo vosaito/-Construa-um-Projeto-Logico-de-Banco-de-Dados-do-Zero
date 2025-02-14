@@ -1,0 +1,238 @@
+-- Script SQL para estrutura/tabelas do banco de dados Oficina
+
+
+-- drop database autorepair;
+
+
+create database autorepair;
+
+use autorepair;
+
+
+
+create table clients(
+
+	idClient int auto_increment primary key,
+
+    Fname varchar(20) not null,
+
+    Minit varchar(3),
+
+    Lname varchar(20) not null,
+
+    CPF char(11) not null,
+
+    Address varchar(80),
+
+    Contact char(11) not null,
+
+    constraint unique_client_cpf unique (CPF)
+
+);
+
+
+
+
+
+create table vehicle(
+
+	idVehicle int auto_increment,
+
+    idvehicleClient int,
+
+    Brand varchar(25) not null,
+
+    Model varchar(45) not null,
+
+    Lplate char(7) not null,
+
+    Color varchar(15),
+
+    Fabricationyear year not null,
+
+    primary key (idvehicle, idvehicleClient),
+
+    constraint unique_vehicle_lplate unique (Lplate),
+
+    constraint fk_vehicle_client foreign key (idvehicleClient) references clients(idClient)
+
+);
+
+
+
+
+
+create table quotes(
+
+	idQuote int auto_increment,
+
+    idquoteClient int,
+
+    issueDate date not null,
+
+    StatusQuote ENUM('Em avaliação', 'Aguardando aprovação', 'Declinado', 'Aprovado') default 'Em avaliação',
+
+    endDate date not null,
+
+    primary key (idQuote, idquoteClient),
+
+    constraint fk_quote_client foreign key (idquoteClient) references clients(idClient)
+
+);
+
+
+
+
+
+create table serviceorder(
+
+	idsOrder int auto_increment,
+
+    idsOrderQuote int,
+
+    issueDate date not null,
+
+    statusOrder ENUM('Na fila de espera', 'Em execução', 'Finalizado') default 'Na fila de espera',
+
+    endDate date,
+
+    primary key (idsOrder, idsOrderQuote),
+
+    constraint fk_serviceorder_quote foreign key (idsOrderQuote) references quotes(idQuote)
+
+);
+
+
+
+
+
+create table mechanic(
+
+	idMechanic int auto_increment primary key,
+
+    Fname varchar(20) not null,
+
+    Lname varchar(20) not null,
+
+    CPF char(11) not null,
+
+    Address varchar(80),
+
+    Speciality ENUM('N/A', 'Motor', 'Elétrica', 'Ar condicionado', 'Acessórios', 'Revisões') default 'N/A',
+
+    constraint unique_mechanic_cpf unique (CPF)
+
+);
+
+
+
+
+
+create table service(
+
+	idService int auto_increment primary key,
+
+    service varchar(80) not null,
+
+    PricePerHour float not null,
+
+    Descrition varchar(255)
+
+);
+
+
+
+
+
+create table part(
+
+	idPart int auto_increment primary key,
+
+    externalCode varchar(30) not null,
+
+    Brand varchar(25) not null,
+
+    namePart varchar(45) not null,
+
+    Price float not null,
+
+    Descrition varchar(255),
+
+    constraint unique_externalcode unique (externalCode)
+
+);
+
+
+
+
+
+create table mechanicquote(
+
+	idmechQuote int,
+
+    idmechQuote_mech int,
+
+    primary key (idmechQuote, idmechQuote_mech),
+
+    constraint fk_mechanicquote_quote foreign key (idmechQuote) references quotes(idQuote),
+
+    constraint fk_mechanicquote_mech foreign key (idmechQuote_mech) references mechanic(idMechanic)
+
+);
+
+
+
+
+create table mechanicorder(
+
+	idmechOrder int,
+
+    idmechOrder_mech int,
+
+    primary key (idmechOrder, idmechOrder_mech),
+
+    constraint fk_mechanicorder_order foreign key (idmechOrder) references serviceorder(idsOrder),
+
+    constraint fk_mechanicorder_mech foreign key (idmechOrder_mech) references mechanic(idMechanic)
+
+);
+
+
+
+
+
+create table quoteservice(
+
+	idquoteService int,
+
+    idquoteService_quote int,
+
+    workhours float not null,
+
+    primary key (idquoteService, idquoteService_quote),
+
+    constraint fk_quoteservice_service foreign key (idquoteService) references service(idService),
+
+    constraint fk_quoteservice_quote foreign key (idquoteService_quote) references quotes(idQuote)
+
+);
+
+
+
+
+create table quotepart(
+
+	idquotePart int,
+
+    idquotePart_quote int,
+
+    Quantity float not null,
+
+    primary key (idquotePart, idquotePart_quote),
+
+    constraint fk_quotepart_part foreign key (idquotePart) references part(idPart),
+
+    constraint fk_quotepart_quote foreign key (idquotePart_quote) references quotes(idQuote)
+
+);
+
