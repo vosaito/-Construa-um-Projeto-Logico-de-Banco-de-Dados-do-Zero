@@ -1,0 +1,259 @@
+-- Persistindo dados ao banco de dados da Oficina
+
+
+
+insert into clients(Fname, Minit, Lname, CPF, Address, Contact) values
+
+	('Maria','M','Silva','12346789011','rua silva de prata, 29, Carangola - Cidade das flores', '11987654321'),
+
+	('Matheus','O','Pimentel','98765432110','rua alameda, 289, Centro - Cidade das flores', '11912345679'),
+
+        ('Ricardo','F','Silva','45678913981','avenida alameda vinha, 1009, Centro - Cidade das flores', '11956781234'),
+        ('Julia','S','França','78912345610','rua lareiras, 861, Centro - Cidade das flores', '11943219876'),
+ 
+        ('Roberta','G','Assis','98745631981','avenida koller, 19, Centro - Cidade das flores', '11956743218'),
+
+        ('Isabela','M','Cruz','65478912312','rua alameda das flores, 28, Centro - Cidade das flores', '11989763542'),
+        ('Vitória','A','Santana','11122233309','rua dos pinheiros, 31 centro - Cidade das flores','11932165487');
+
+
+
+
+
+insert into vehicle(idvehicleClient, Brand, Model, Lplate, Color, Fabricationyear) values
+
+	('1','Ford','Fiesta','RCA9E87','Prata','2018'), 
+	('2','Chevrolet','Onix','TEA3E51','Preto','2014'),
+	('3','Chevrolet','Spin','EWD9F66','Branco','2021'),
+
+	('4','Hyundai','HB20','GUI8G34','Preto','2017'),
+
+	('5','Fiat','Argo','CEE9D13','Vermelho','2021'),
+
+	('6','Ford','Focus','EJA5F77','Prata','2011'),
+                	
+	('7','Fiat','Pulse','FRD6G34','Preto','2022'),
+                	
+	('2','Jeep','Renegade','FME5E77','Prata','2017'),
+                	
+	('5','Chevrolet','Tracker','EFT5H82','Vermelho','2015');
+
+
+
+
+-- 'Em avaliação', 'Aguardando aprovação', 'Declinado', 'Aprovado'16:55 14/02/2025
+
+insert into quotes(idquoteClient, issueDate, StatusQuote, endDate) values
+	('1','2024-05-04','Aprovado','2024-06-01'),
+        ('2','2024-05-24','Aprovado','2024-05-30'),
+
+        ('3','2024-06-08','Aguardando aprovação','2024-06-20'),
+ 
+        ('4','2024-06-15','Aprovado','2024-07-10'),
+ 
+        ('5','2024-07-20','Aprovado','2024-07-30'),
+
+        ('6','2024-08-11','Aprovado','2024-08-20'),
+ 
+        ('7','2024-08-15','Declinado','2024-08-29'),
+        ('4','2024-09-04','Aguardando aprovação','2024-09-24'),
+        ('5','2024-10-04',default,'2024-10-21');
+
+
+
+
+-- 'Na fila de espera', 'Em execução', 'Finalizado'
+
+insert into serviceorder(idsOrderQuote, issueDate, statusOrder, endDate) values
+				
+	('1','2024-05-04','Finalizado','2024-06-01'),
+                
+	('2','2024-05-24','Finalizado','2024-05-30'),
+                
+	('4','2024-06-15','Em execução','2024-07-10'),
+                
+	('5','2024-07-20','Em execução','2024-07-30'),
+                
+	('6','2024-08-11',default,'2024-08-20');
+                
+
+
+
+
+-- 'N/A', 'Motor', 'Elétrica', 'Ar condicionado', 'Acessórios', 'Revisões'
+
+insert into mechanic(Fname, Lname, CPF, Address, Speciality) values
+				
+	('Fabio','Santos','78965432181','rua das araucárias, 75 Centro - Cidade das flores','Elétrica'),
+                
+	('Marcos','Silva','89754637212','rua das palmeiras, 1175 Centro - Cidade das flores','Revisões'),
+                
+	('Fernando','Cardoso','46573829101','rua dos eucaliptos, 102 Centro - Cidade das flores','Motor'),
+                
+	('Gustavo','Magalhâes','17283498021','rua dos coqueiros, 753 Centro - Cidade das flores','Ar condicionado');
+                
+
+
+
+
+insert into service(service, PricePerHour, Descrition) values
+				
+	('Troca de bateria','150','Verificação da bateira/alternador e troca das peças necessárias'),
+                
+	('Troca de velas','120','Verificação da velas e bicos do motor e troca das peças necessárias'),
+                
+	('Revisão de filtro e óleo','200','Verificação dos filtros e óleo e troca das peças necessárias'),
+                
+	('Troca dos fárois','150','Verificação das luzes e setas e troca das peças necessárias'),
+                
+	('Retificação do motor','350','Verificação da dos cilindros e cabeçote do motor e troca das peças necessárias'),
+                
+	('Retificação do radiador','150','Verificação do radiador/colméia e possíveis vazamentos e troca das peças necessárias'),
+                
+	('Travas e vidros elétricos','250','Verificação das travas e vidros elétricos e troca das peças necessárias'),
+                
+	('Troca das engrenagens do cambio','350','Verificação do câmbio e troca das peças necessárias'),
+                
+	('Revisão do Ar condicionado','850','Verificação do sistema de ar condicionado e troca das peças necessárias');
+                
+
+
+
+
+insert into part(externalCode, Brand, namePart, Price, Descrition) values
+				
+	('BT1609203945','Moura','Bateria 180Ah','350','Bateria para automóveis de passeio'),
+
+	('1986A01068 F000BL04E9','Bosch','Alternador B3 12v 90a','800','Alternador para automóveis de passeio'),
+                
+	('F 000 KE0 P43','Bosch','Jogo Vela 4un.','100','Kit de 4 velas para motores de automóveis de passeio'),
+                
+	('0 280 157 132','Bosch','Bico Injetor','120','Bico injetor para motores flex para automóveis de passeio'),
+                
+	('88905845','ACDelco','Filtro de óleo','50','Filtro de óleo para motores para automóveis de passeio'),
+                
+	('SKU 4314','Tecfil','Filtro Combustível GI04','350','Filtro Combustível para motores flex automóveis de passeio'),
+               
+	('GA2CK972A0','ACDelco','Óleo Motor 15w40','60','Óleo de Motor 15w40 semissintético para motores para automóveis de passeio'),
+             
+	('KIT2487','Arteb','FAROL CROMADO CLASSIC','350','Farol dianteiro para automóveis de passeio'),
+                
+	('12972C1','Philips','Lâmpadas De Farol H7','25','Lâmpadas De Farol H7 55watts 12volts para automóveis de passeio'),
+                
+	('XS4Z7230A','Ford','Kit Garfo Engrenagens Cambio','990','Kit Garfo Engrenagens para cambio manual para automóveis de passeio'),
+                
+	('CAR ZC 75 SAE 75W-80','Petronas','Óleo 75w80 Câmbio Manual','130','Óleo 75w80 Semissintetico Câmbio Manual para automóveis de passeio'),
+              
+	('CAR-AC-R134','Du Gold','Kit Recarga Gás Ar Condicionado','240','Kit Recarga de Gás para Ar Condicionado para automóveis de passeio');
+
+
+
+
+
+insert into mechanicquote(idmechQuote, idmechQuote_mech) values
+				
+	('2','3'),
+                
+	('4','1'),
+                
+	('6','2'),
+                
+	('8','4'),
+                
+	('1','1'),
+                
+	('3','2'),
+                
+	('5','4'),
+                
+	('7','3'),
+                
+	('9','2');
+
+
+
+
+
+insert into mechanicorder(idmechOrder, idmechOrder_mech) values
+				('1','1'),
+                
+	('2','3'),
+                
+	('3','1'),
+                
+	('4','4'),
+                
+	('5','2');
+                
+
+
+
+
+insert into quoteservice(idquoteService, idquoteService_quote, workhours) values
+				
+	('2','2','3.5'),
+                
+	('5','2','3'),
+                
+	('7','4','2'),
+   
+	('3','6','1'),
+                
+	('9','8','1'),
+                
+	('4','1','1'),
+                
+	('3','3','1'),
+                
+	('9','5','1'),
+                
+	('2','7','3.5'),
+                
+	('8','7','3'),
+                
+	('3','9','1');
+                
+                
+
+
+
+insert into quotepart(idquotePart, idquotePart_quote, quantity) values
+				
+	('3','2','1'),
+               
+	('4','2','2'),
+                
+	('5','4','1'),
+                
+	('6','4','1'),
+                
+	('7','4','4'),
+                
+	('12','8','1'),
+                
+	('8','1','2'),
+                
+	('9','1','2'),
+                
+	('5','3','1'),
+                
+	('6','3','1'),
+   
+	('7','3','4'),
+                
+	('12','5','1'),
+                
+	('3','7','1'),
+                
+	('4','7','1'),
+                
+	('10','7','1'),
+                
+	('11','7','2'),
+                
+	('5','9','1'),
+                
+	('6','9','1'),
+                
+	('7','9','4');
+
