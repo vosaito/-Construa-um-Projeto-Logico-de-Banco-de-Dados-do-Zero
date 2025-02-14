@@ -1,0 +1,119 @@
+-- Queries para consulta/pesquisa ao banco de dados da oficina
+
+
+
+-- Relação de carros já arrumados
+
+select distinct idsOrder as 'ID OS', serviceorder.issueDate as 'Data de emissão da OS', statusOrder as 'Status do serviço', serviceorder.endDate as 'Data de conslusão', idClient as 'ID Cliente', concat(Fname,' ',Lname) as 'Nome completo', CPF, idVehicle as 'ID Carro', Brand as 'Marca', Model as 'Modelo', Lplate as 'Placa', Color as 'Cor', Fabricationyear as 'Ano de Fabricação' 
+	
+	from serviceorder, quotes, clients, vehicle
+
+	where idClient = idquoteClient and idquoteClient = idsOrderQuote and idClient = idvehicleClient and statusOrder = 'Finalizado';
+
+
+
+
+
+-- Relação de serviços de manutenção para cada orçamento
+
+select idQuote as 'ID Orçamento', idService as 'ID Serviço', service as 'Serviço', Descrition as 'Descrição' 
+	from quotes, service, quoteservice
+
+	where idQuote = idquoteService_quote and idquoteService = idService;
+
+
+
+
+
+-- Relação dos clientes que solicitaram o orçamento e como está o status
+
+select idClient as 'ID Cliente', concat(Fname,' ',Lname) as 'Nome completo', CPF, idQuote as 'ID Orçamento', issueDate as 'Data de emissão do Orçamento', StatusQuote as 'Status do orçamento', endDate as 'Data de conclusão'
+
+	from quotes, clients
+
+		where idClient = idquoteClient;
+
+
+
+-- Relação de mecânicos responsáveis e quantas horas de trabalho para cada serviço de cada orçamento
+
+select idMechanic as 'ID Mecânico', concat(Fname,' ',Lname) as 'Mecânico', CPF, Speciality as 'Especialidade', idquoteService_quote as 'ID Orçamento', service as 'Serviço', workhours as 'Quantidades de Horas destinadas'
+ 
+	from mechanic, mechanicquote, quoteservice, service
+
+		where idMechanic = idmechQuote_mech and idmechQuote = idquoteService_quote and idquoteService = idService
+
+		order by idquoteService_quote;
+    
+    
+
+
+
+-- Lista de peças utilizadas em cada orçamento e as quantidades de cada peça
+
+select idQuote as 'ID Orçamento', idPart as 'ID Peça', externalCode as 'Cód. Referência', Brand as 'Fabricante', namePart as 'Nome do item', Descrition as 'Descrição',  Quantity as 'Quantidade'
+
+	from quotes
+ 
+		join quotepart on idQuote = idquotePart_quote
+
+		join part on idquotePart = idPart;
+		
+
+
+
+-- Valor total de cada Orçamento (Peças+Mão de obra)
+
+select idQuote as 'ID Orçamento', max(StatusQuote) as 'Status Orçamento', sum(pPrice) as 'Valor Peças', sum(sPrice) as 'Valor Serviço', sum(pPrice)+sum(sPrice) as 'Valor total'
+
+	from (select idPart, idquotePart_quote, Price*Quantity as 'pPrice' 
+		from part, quotepart 
+		where idpart = idquotePart) as a,
+	(select idService, idquoteService_quote, PricePerHour*workhours as 'sPrice' 
+		from service, quoteservice
+
+		where idService = idquoteService) as b, quotes
+
+	where idQuote = idquotePart_quote and b.idquoteService_quote = idQuote
+	group by idQuote
+	order by idQuote;
+    
+    
+
+
+
+-- Orçamentos com valores totais maiores de 3000 reais
+
+select idQuote as 'ID Orçamento', max(StatusQuote) as 'Status Orçamento', sum(pPrice) as 'Valor Peças', sum(sPrice) as 'Valor Serviço', sum(pPrice)+sum(sPrice) as 'Valor total'
+
+	from (select idPart, idquotePart_quote, Price*Quantity as 'pPrice'
+		 from part, quotepart
+
+			where idpart = idquotePart) as a,
+ 
+		(select idService, idquoteService_quote, PricePerHour*workhours as 'sPrice' 
+		from service, quoteservice
+
+			where idService = idquoteService) as b, quotes
+
+	where idQuote = idquotePart_quote and b.idquoteService_quote = idQuote
+
+	group by idQuote
+	having sum(pPrice)+sum(sPrice)> 3000
+
+	order by idQuote;
+    
+    
+
+
+
+-- Quantidade de vezes cada serviço foi orçado
+
+select idService, service, count(idquoteService_quote) as 'Quantidade Vezes Orçada'
+ 
+	from service
+ 
+		left join quoteservice on idquoteService = idService
+
+	group by idService;
+	
